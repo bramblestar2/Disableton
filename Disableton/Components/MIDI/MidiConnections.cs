@@ -10,21 +10,21 @@ namespace Disableton.Components.MIDI
 {
     static public class MidiConnections
     {
-        static public List<MidiDevice>? MidiDevices
+        static public List<InputDevice>? MidiInputDevices
         {
-            get => _midiDevices;
+            get => _midiInputDevices;
             private set
             {
-                _midiDevices = value;
+                _midiInputDevices = value;
             }
         }
 
-        static private List<MidiDevice>? _midiDevices = null;
+        static private List<InputDevice>? _midiInputDevices = null;
 
 
         static public void ReloadConnections()
         {
-
+            MidiInputDevices = new List<InputDevice>(InputDevice.GetAll());
         }
     }
 }
