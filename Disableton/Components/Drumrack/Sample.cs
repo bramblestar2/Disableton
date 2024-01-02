@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System;
+using System.IO;
 
 namespace Disableton.Components.Drumrack
 {
@@ -29,10 +30,13 @@ namespace Disableton.Components.Drumrack
 
         public Sample(string file)
         {
-            Audio = new AudioFileReader(file);
-            _output = new WaveOutEvent();
-            _offset = new OffsetSampleProvider(Audio);
-            _output.Init(_offset);
+            if (File.Exists(file))
+            {
+                Audio = new AudioFileReader(file);
+                _output = new WaveOutEvent();
+                _offset = new OffsetSampleProvider(Audio);
+                _output.Init(_offset);
+            }
         }
 
         public Sample(string file, TimeSpan from, TimeSpan to)

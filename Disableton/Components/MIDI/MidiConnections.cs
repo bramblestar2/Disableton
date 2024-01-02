@@ -1,11 +1,13 @@
-﻿using Melanchall.DryWetMidi.Multimedia;
+﻿using RtMidi.Core;
+using RtMidi.Core.Devices;
+using RtMidi.Core.Devices.Infos;
 using System.Collections.Generic;
 
 namespace Disableton.Components.MIDI
 {
     static public class MidiConnections
     {
-        static public List<InputDevice>? MidiInputDevices
+        static public List<IMidiInputDeviceInfo>? MidiInputDevices
         {
             get => _midiInputDevices;
             private set
@@ -14,12 +16,12 @@ namespace Disableton.Components.MIDI
             }
         }
 
-        static private List<InputDevice>? _midiInputDevices = null;
+        static private List<IMidiInputDeviceInfo>? _midiInputDevices = null;
 
 
         static public void ReloadConnections()
         {
-            MidiInputDevices = new List<InputDevice>(InputDevice.GetAll());
+            MidiInputDevices = new List<IMidiInputDeviceInfo>(MidiDeviceManager.Default.InputDevices);
         }
     }
 }

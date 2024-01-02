@@ -1,26 +1,28 @@
-﻿using Melanchall.DryWetMidi.Multimedia;
-using System;
+﻿using RtMidi.Core.Devices;
+using RtMidi.Core.Devices.Infos;
 using System.Collections.Generic;
 
 namespace Disableton.Components.MIDI
 {
     public class MidiManager
     {
-        public List<InputDevice> InputDevices
+        public List<IMidiInputDevice> InputDevices
         {
             get => _inputDevices;
             private set => _inputDevices = value;
         }
 
-        private List<InputDevice> _inputDevices = new List<InputDevice>();
+        private List<IMidiInputDevice> _inputDevices = new List<IMidiInputDevice>();
 
         public MidiManager()
         {
         }
 
-        public void AddMidiDevice(InputDevice device)
+        public void AddMidiDevice(IMidiInputDeviceInfo device)
         {
-            InputDevices.Add(device);
+            IMidiInputDevice inputDevice = device.CreateDevice();
+            InputDevices.Add(inputDevice);
+            inputDevice.Open();
         }
 
         public void RemoveMidiDevice(int index)
@@ -29,7 +31,7 @@ namespace Disableton.Components.MIDI
                 InputDevices.RemoveAt(index);
         }
 
-        public void ListenToAllMidis(EventHandler<MidiEventReceivedEventArgs> action)
+        public void ListenToAllMidis(NoteOnMessageHandler action)
         {
             for (int i = 0; i < InputDevices.Count; i++)
             {
@@ -37,23 +39,19 @@ namespace Disableton.Components.MIDI
             }
         }
 
-        public void ListenToMidi(int index, EventHandler<MidiEventReceivedEventArgs> action)
+        public void ListenToMidi(int index, NoteOnMessageHandler action)
         {
             if (InRange(index))
-            {
-                if (!InputDevices[index].IsListeningForEvents)
-                    InputDevices[index].StartEventsListening();
-
-                InputDevices[index].EventReceived += action;
+            { 
+                InputDevices[index].NoteOn += action;
             }    
         }
 
         public void Clear()
         {
-            foreach (InputDevice device in InputDevices)
+            foreach (IMidiInputDevice device in InputDevices)
             {
-                if (device.IsListeningForEvents)
-                    device.StopEventsListening();
+                device?.Dispose();
             }
 
             InputDevices.Clear();
