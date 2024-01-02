@@ -12,9 +12,13 @@
 
   <Border>
     <Grid ColumnDefinitions="*,*,*,*,*,*"
-          RowDefinitions="*,*">
+          RowDefinitions="Auto,*,*">
+      <Button Content="Reload" Grid.Column="0" Click="ReloadButton"/>
+      <Button Content="Add Device" Grid.Column="1" Click="AddDeviceButton"/>
+      <Button Content="Add Listener" Grid.Column="2" Click="AddListenersButton"/>
+
       <ListBox Grid.Column="0"
-               Grid.Row="0"/>
+               Grid.Row="1"/>
     </Grid>
   </Border>
 </UserControl>

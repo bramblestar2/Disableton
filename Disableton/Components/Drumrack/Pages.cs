@@ -21,6 +21,12 @@ namespace Disableton.Components.Drumrack
 
         }
 
+        public void Play(int page, int note)
+        {
+            if (PageInRange(page))
+                Drumracks[page].Play(note);
+        }
+
         public void RemovePage(int page)
         {
             if (PageInRange(page))
@@ -50,7 +56,7 @@ namespace Disableton.Components.Drumrack
 
         private bool PageInRange(int page)
         {
-            if (page > 0 &&
+            if (page >= 0 &&
                 page < Drumracks.Count)
             {
                 return true;
