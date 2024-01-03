@@ -1,27 +1,28 @@
-﻿using Melanchall.DryWetMidi.Multimedia;
-using System;
-using System.Collections.Generic;
+﻿using RtMidi.Core.Devices;
+using RtMidi.Core.Devices.Infos;
 using System.Collections.ObjectModel;
 
 namespace Disableton.Components.MIDI
 {
     public class MidiManager
     {
-        public ObservableCollection<InputDevice> InputDevices
+        public ObservableCollection<IMidiInputDevice> InputDevices
         {
             get => _inputDevices;
             private set => _inputDevices = value;
         }
 
-        private ObservableCollection<InputDevice> _inputDevices = new ObservableCollection<InputDevice>();
+        private ObservableCollection<IMidiInputDevice> _inputDevices = new ObservableCollection<IMidiInputDevice>();
 
         public MidiManager()
         {
         }
 
-        public void AddMidiDevice(InputDevice device)
+        public void AddMidiDevice(IMidiInputDeviceInfo device)
         {
-            InputDevices.Add(device);
+            var inputDevice = device.CreateDevice();
+            inputDevice.Open();
+            InputDevices.Add(inputDevice);
         }
 
         public void RemoveMidiDevice(int index)
@@ -30,7 +31,7 @@ namespace Disableton.Components.MIDI
                 InputDevices.RemoveAt(index);
         }
 
-        public void ListenToAllMidis(EventHandler<MidiEventReceivedEventArgs> action)
+        public void ListenToAllMidis(NoteOnMessageHandler action)
         {
             for (int i = 0; i < InputDevices.Count; i++)
             {
@@ -38,23 +39,20 @@ namespace Disableton.Components.MIDI
             }
         }
 
-        public void ListenToMidi(int index, EventHandler<MidiEventReceivedEventArgs> action)
+        public void ListenToMidi(int index, NoteOnMessageHandler action)
         {
             if (InRange(index))
             {
-                if (!InputDevices[index].IsListeningForEvents)
-                    InputDevices[index].StartEventsListening();
-
-                InputDevices[index].EventReceived += action;
+                InputDevices[index].NoteOn += action;
             }    
         }
 
         public void Clear()
         {
-            foreach (InputDevice device in InputDevices)
+            foreach (IMidiInputDevice device in InputDevices)
             {
-                if (device.IsListeningForEvents)
-                    device.StopEventsListening();
+                device.Close();
+                device.Dispose();
             }
 
             InputDevices.Clear();

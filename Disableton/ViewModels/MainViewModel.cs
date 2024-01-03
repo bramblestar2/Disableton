@@ -1,34 +1,55 @@
-﻿using Disableton.Components.MIDI;
-using Melanchall.DryWetMidi.Multimedia;
+﻿using Avalonia.Threading;
+using Disableton.Components.MIDI;
+using RtMidi.Core.Devices;
+using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace Disableton.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    public ObservableCollection<InputDevice>? TotalMidiDevices
+    public ObservableCollection<string> TotalMidiDevices
     {
-        get => MidiConnections.MidiInputDevices;
+        get => _totalMidiDevices;
+        private set => _totalMidiDevices = value;
     }
 
-    public ObservableCollection<InputDevice> ConnectedDevices
+    public ObservableCollection<IMidiInputDevice> ConnectedDevices
     {
         get => _midiManager.InputDevices;
     }
 
     private MidiManager _midiManager = new MidiManager();
+    private ObservableCollection<string> _totalMidiDevices = new ObservableCollection<string>();
 
     public MainViewModel()
     {
         MidiConnections.ReloadConnections();
+        RefreshTotalDevicesList();
 
-        DevicesWatcher.Instance.DeviceAdded += Instance_DeviceAdded;
-        DevicesWatcher.Instance.DeviceRemoved += Instance_DeviceAdded;
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
+        timer.Tick += (s, e) =>
+        {
+            if (MidiConnections.ReloadConnections())
+                RefreshTotalDevicesList();
+        };
+
+        timer.Start();
+
+        //_midiManager.AddMidiDevice(MidiConnections.MidiInputDevices[0]);
+        //
+        //_midiManager.ListenToAllMidis((IMidiInputDevice s, in NoteOnMessage e) =>
+        //{
+        //    Debug.WriteLine($"{e.Key}");
+        //});
     }
 
-    private void Instance_DeviceAdded(object? sender, DeviceAddedRemovedEventArgs e)
+    private void RefreshTotalDevicesList()
     {
-        MidiConnections.ReloadConnections();
+        TotalMidiDevices.Clear();
+        foreach (var device in MidiConnections.MidiInputDevices)
+        {
+            TotalMidiDevices.Add(device.Name);
+        }
     }
 }
