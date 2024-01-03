@@ -1,18 +1,19 @@
 ﻿using Melanchall.DryWetMidi.Multimedia;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Disableton.Components.MIDI
 {
     public class MidiManager
     {
-        public List<InputDevice> InputDevices
+        public ObservableCollection<InputDevice> InputDevices
         {
             get => _inputDevices;
             private set => _inputDevices = value;
         }
 
-        private List<InputDevice> _inputDevices = new List<InputDevice>();
+        private ObservableCollection<InputDevice> _inputDevices = new ObservableCollection<InputDevice>();
 
         public MidiManager()
         {

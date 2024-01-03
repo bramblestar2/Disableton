@@ -1,11 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Multimedia;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Disableton.Components.MIDI
 {
     static public class MidiConnections
     {
-        static public List<InputDevice>? MidiInputDevices
+        static public ObservableCollection<InputDevice>? MidiInputDevices
         {
             get => _midiInputDevices;
             private set
@@ -14,12 +15,12 @@ namespace Disableton.Components.MIDI
             }
         }
 
-        static private List<InputDevice>? _midiInputDevices = null;
+        static private ObservableCollection<InputDevice>? _midiInputDevices = null;
 
 
         static public void ReloadConnections()
         {
-            MidiInputDevices = new List<InputDevice>(InputDevice.GetAll());
+            MidiInputDevices = new ObservableCollection<InputDevice>(InputDevice.GetAll());
         }
     }
 }
