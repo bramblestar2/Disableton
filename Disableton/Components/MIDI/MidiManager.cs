@@ -1,18 +1,18 @@
 ﻿using RtMidi.Core.Devices;
 using RtMidi.Core.Devices.Infos;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Disableton.Components.MIDI
 {
     public class MidiManager
     {
-        public List<IMidiInputDevice> InputDevices
+        public ObservableCollection<IMidiInputDevice> InputDevices
         {
             get => _inputDevices;
             private set => _inputDevices = value;
         }
 
-        private List<IMidiInputDevice> _inputDevices = new List<IMidiInputDevice>();
+        private ObservableCollection<IMidiInputDevice> _inputDevices = new ObservableCollection<IMidiInputDevice>();
 
         public MidiManager()
         {
@@ -20,9 +20,9 @@ namespace Disableton.Components.MIDI
 
         public void AddMidiDevice(IMidiInputDeviceInfo device)
         {
-            IMidiInputDevice inputDevice = device.CreateDevice();
-            InputDevices.Add(inputDevice);
+            var inputDevice = device.CreateDevice();
             inputDevice.Open();
+            InputDevices.Add(inputDevice);
         }
 
         public void RemoveMidiDevice(int index)
@@ -42,7 +42,7 @@ namespace Disableton.Components.MIDI
         public void ListenToMidi(int index, NoteOnMessageHandler action)
         {
             if (InRange(index))
-            { 
+            {
                 InputDevices[index].NoteOn += action;
             }    
         }
@@ -51,7 +51,8 @@ namespace Disableton.Components.MIDI
         {
             foreach (IMidiInputDevice device in InputDevices)
             {
-                device?.Dispose();
+                device.Close();
+                device.Dispose();
             }
 
             InputDevices.Clear();

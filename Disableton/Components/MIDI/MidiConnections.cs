@@ -1,13 +1,16 @@
-﻿using RtMidi.Core;
-using RtMidi.Core.Devices;
+﻿using DynamicData;
+using RtMidi.Core;
 using RtMidi.Core.Devices.Infos;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Disableton.Components.MIDI
 {
+    
+
     static public class MidiConnections
     {
-        static public List<IMidiInputDeviceInfo>? MidiInputDevices
+        static public ObservableCollection<IMidiInputDeviceInfo> MidiInputDevices
         {
             get => _midiInputDevices;
             private set
@@ -16,12 +19,17 @@ namespace Disableton.Components.MIDI
             }
         }
 
-        static private List<IMidiInputDeviceInfo>? _midiInputDevices = null;
+        static private ObservableCollection<IMidiInputDeviceInfo> _midiInputDevices = new ObservableCollection<IMidiInputDeviceInfo>();
 
 
-        static public void ReloadConnections()
+        static public bool ReloadConnections()
         {
-            MidiInputDevices = new List<IMidiInputDeviceInfo>(MidiDeviceManager.Default.InputDevices);
+            if (MidiInputDevices.Count == MidiDeviceManager.Default.InputDevices.Count()) return false;
+
+            MidiInputDevices.Clear();
+            MidiInputDevices.AddRange(MidiDeviceManager.Default.InputDevices);
+
+            return true;
         }
     }
 }

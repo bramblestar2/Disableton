@@ -13,12 +13,9 @@
   <Border>
     <Grid ColumnDefinitions="*,*,*,*,*,*"
           RowDefinitions="Auto,*,*">
-      <Button Content="Reload" Grid.Column="0" Click="ReloadButton"/>
-      <Button Content="Add Device" Grid.Column="1" Click="AddDeviceButton"/>
-      <Button Content="Add Listener" Grid.Column="2" Click="AddListenersButton"/>
-
       <ListBox Grid.Column="0"
-               Grid.Row="1"/>
+               Grid.Row="1"
+               ItemsSource="{Binding TotalMidiDevices}"/>
     </Grid>
   </Border>
 </UserControl>
