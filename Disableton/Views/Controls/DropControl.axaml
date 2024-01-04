@@ -3,29 +3,76 @@
         xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:controls="using:Disableton.Views.Controls">
   <Design.PreviewWith>
-    <controls:DropControl />
+    <Border Padding="20">
+      <controls:DropControl />
+    </Border>
   </Design.PreviewWith>
 
   <Styles.Resources>
-    
+    <SolidColorBrush x:Key="DropControlBackground" Color="#22000000"/>
   </Styles.Resources>
   
   <Style Selector="controls|DropControl">
     <Setter Property="Width" Value="100"/>
     <Setter Property="Height" Value="100"/>
     <Setter Property="DragDrop.AllowDrop" Value="True"/>
+    <Setter Property="Background" Value="{DynamicResource DropControlBackground}"/>
+    <Setter Property="CornerRadius" Value="20"/>
+
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Duration="0:0:0.3"
+                         Easing="CubicEaseIn"
+                         Property="Background"/>
+        <CornerRadiusTransition Duration="0:0:0.3"
+                                Easing="CubicEaseIn"
+                                Property="CornerRadius"/>
+      </Transitions>
+    </Setter>
     
     <!-- Set Defaults -->
     <Setter Property="Template">
       <ControlTemplate>
         <Border DragDrop.AllowDrop="True"
-          Background="#22000000"
-          CornerRadius="20">
+                Background="{TemplateBinding Background}"
+                CornerRadius="{TemplateBinding CornerRadius}">
           <Viewbox RenderTransform="scale(0.6)">
-            <materialIcons:MaterialIcon Kind="Upload"/>
+            <materialIcons:MaterialIcon Kind="Upload"
+                                        Name="PART_Icon"
+                                        Foreground="{TemplateBinding Foreground}"/>
           </Viewbox>
         </Border>
       </ControlTemplate>
     </Setter>
+  
+    <Style Selector="^ /template/ materialIcons|MaterialIcon#PART_Icon">
+      <Setter Property="Transitions">
+        <Transitions>
+          <TransformOperationsTransition Duration="0:0:1"
+                                         Easing="CubicEaseInOut"
+                                         Property="RenderTransform"/>
+        </Transitions>
+      </Setter>
+    </Style>
+      
+    <Style Selector="^:pointerover">
+      <Setter Property="Background" Value="#44666666"/>
+    </Style>
+      
+    <Style Selector="^:drag-enter">
+      <Setter Property="CornerRadius" Value="10"/>
+      <Setter Property="Background" Value="#66000000"/>
+    </Style>
+
+    <Style Selector="^:drop">
+      <Setter Property="CornerRadius" Value="30"/>
+      <Setter Property="Background" Value="#55005090"/>
+    
+     <Style Selector="^ /template/ materialIcons|MaterialIcon#PART_Icon">
+       <Setter Property="RenderTransform" Value="rotate(360deg)"/>
+     </Style>
+    </Style>
   </Style>
+
+  
 </Styles>

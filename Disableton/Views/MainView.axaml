@@ -46,8 +46,7 @@
       <controls:DropControl Width="100"
                             Height="100"
                             Grid.Column="2"
-                            Grid.Row="1"
-                            Background="#22000000"/>
+                            Grid.Row="1"/>
     </Grid>
   </Border>
 </UserControl>
