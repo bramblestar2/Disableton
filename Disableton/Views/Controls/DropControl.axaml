@@ -1,0 +1,31 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:controls="using:Disableton.Views.Controls">
+  <Design.PreviewWith>
+    <controls:DropControl />
+  </Design.PreviewWith>
+
+  <Styles.Resources>
+    
+  </Styles.Resources>
+  
+  <Style Selector="controls|DropControl">
+    <Setter Property="Width" Value="100"/>
+    <Setter Property="Height" Value="100"/>
+    <Setter Property="DragDrop.AllowDrop" Value="True"/>
+    
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border DragDrop.AllowDrop="True"
+          Background="#22000000"
+          CornerRadius="20">
+          <Viewbox RenderTransform="scale(0.6)">
+            <materialIcons:MaterialIcon Kind="Upload"/>
+          </Viewbox>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

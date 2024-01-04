@@ -22,9 +22,9 @@ namespace Disableton.Components.MIDI
         static private ObservableCollection<IMidiInputDeviceInfo> _midiInputDevices = new ObservableCollection<IMidiInputDeviceInfo>();
 
 
-        static public bool ReloadConnections()
+        static public bool ReloadConnections(bool forceReload = false)
         {
-            if (MidiInputDevices.Count == MidiDeviceManager.Default.InputDevices.Count()) return false;
+            if ((MidiInputDevices.Count == MidiDeviceManager.Default.InputDevices.Count()) || forceReload) return false;
 
             MidiInputDevices.Clear();
             MidiInputDevices.AddRange(MidiDeviceManager.Default.InputDevices);

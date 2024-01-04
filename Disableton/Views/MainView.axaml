@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Disableton.ViewModels"
+             xmlns:controls="clr-namespace:Disableton.Views.Controls"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Disableton.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -10,12 +12,42 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
+  <UserControl.Styles>
+    <StyleInclude Source="/Views/Controls/DropControl.axaml"/>
+  </UserControl.Styles>
+
   <Border>
-    <Grid ColumnDefinitions="*,*,*,*,*,*"
+    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*,*"
           RowDefinitions="Auto,*,*">
       <ListBox Grid.Column="0"
                Grid.Row="1"
-               ItemsSource="{Binding TotalMidiDevices}"/>
+               SelectedIndex="{Binding SelectedMidiDevice}"
+               ItemsSource="{Binding TotalMidiDevices}">
+        <ListBox.ContextMenu>
+          <ContextMenu Padding="5">
+            <MenuItem Header="Set As Active"
+                      Command="{Binding SetActiveMidiCommand}"/>
+          </ContextMenu>
+        </ListBox.ContextMenu>
+      </ListBox>
+
+
+      <ListBox Grid.Column="1"
+               Grid.Row="1"
+               ItemsSource="{Binding ConnectedDevices}">
+        <ListBox.ContextMenu>
+          <ContextMenu Padding="5">
+            <MenuItem Header="Remove"
+                      Command="{Binding RemoveMidiCommand}"/>
+          </ContextMenu>
+        </ListBox.ContextMenu>
+      </ListBox>
+
+      <controls:DropControl Width="100"
+                            Height="100"
+                            Grid.Column="2"
+                            Grid.Row="1"
+                            Background="#22000000"/>
     </Grid>
   </Border>
 </UserControl>
