@@ -25,29 +25,33 @@
                 ClipToBounds="True"
                 Name="PART_Border">
           <Grid RowDefinitions="Auto,*,*"
-                ColumnDefinitions="*,*"
+                ColumnDefinitions="Auto,Auto"
                 Margin="5">
             <Viewbox Grid.Row="0"
                      Grid.Column="0"
                      Width="50"
-                     Height="50">
+                     Height="50"
+                     Margin="5">
               <materialIcons:MaterialIcon Kind="AudioBook" />
             </Viewbox>
 
             <TextBlock Text="{Binding Length, StringFormat='{}{0}'}"
                        HorizontalAlignment="Center"
                        Grid.Row="1"
-                       Grid.Column="0"/>
+                       Grid.Column="0"
+                       Margin="5"/>
 
             <TextBlock Text="{Binding Path, StringFormat='{}{0}'}"
                        TextWrapping="Wrap"
                        Grid.Row="0"
-                       Grid.Column="1"/>
+                       Grid.Column="1"
+                       Margin="5"/>
             
             <TextBlock Text="{Binding Name, StringFormat='{}{0}'}"
                        TextWrapping="Wrap"
                        Grid.Row="1"
-                       Grid.Column="1"/>
+                       Grid.Column="1"
+                       Margin="5"/>
 
 
           </Grid>

@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
@@ -6,7 +5,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,6 +45,9 @@ namespace Disableton.Views.Controls
             PseudoClasses.Set(pcDrop, true);
             PseudoClasses.Set(pcDragEnter, false);
 
+            e.RoutedEvent = FileDropEvent;
+            e.Route = RoutingStrategies.Bubble;
+            this.RaiseEvent(e);
             
             Task.Delay(1000).ContinueWith(t =>
             {

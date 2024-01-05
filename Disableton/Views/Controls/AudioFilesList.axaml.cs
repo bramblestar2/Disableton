@@ -1,14 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Selection;
 using Avalonia.Input;
-using Avalonia.Platform.Storage;
+using NAudio.Wave;
+using ReactiveUI;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
 namespace Disableton.Views.Controls
@@ -17,10 +14,13 @@ namespace Disableton.Views.Controls
     {
         private DropControl? _dropControl;
 
+        private readonly string[] mediaExtensions = {
+                    ".WAV", ".MP3", ".OGG", ".AIF", ".MPA", 
+                    ".AIFF", ".AAC", ".WMA", ".FLAC",
+                };
+
         public AudioFilesList()
         {
-            if (_dropControl != null)
-                _dropControl.FileDrop += FileDropCallback;
         }
 
         private void FileDropCallback(object? sender, DragEventArgs e)
@@ -28,7 +28,16 @@ namespace Disableton.Views.Controls
             var files = e.Data.GetFiles();
             if (files is not null)
             {
+                string path = Uri.UnescapeDataString(files.First().Path.AbsolutePath);
                 Debug.WriteLine($"{Uri.UnescapeDataString(files.First().Path.AbsolutePath)}");
+
+                var audioFileIndex = Array.IndexOf(mediaExtensions, System.IO.Path.GetExtension(path).ToUpperInvariant());
+
+                if (-1 != audioFileIndex)
+                {
+                    AudioFileReader waveFile = new AudioFileReader(path);
+                    AddFile(path, waveFile.TotalTime);
+                }
             }
         }
 
@@ -42,7 +51,7 @@ namespace Disableton.Views.Controls
             this.Items.Add(new AudioFileInfo()
             {
                 Path = path,
-                Name = Path.GetFileName(path),
+                Name = System.IO.Path.GetFileName(path),
                 Length = duration
             });
         }
@@ -51,7 +60,25 @@ namespace Disableton.Views.Controls
         {
             if (item is not AudioFileInfo) throw new ArgumentException("Wrong type, expecting " + typeof(AudioFileInfo));
 
-            return new AudioFilesListItem();
+            var listItem = new AudioFilesListItem();
+
+            listItem.ContextMenu = new ContextMenu()
+            {
+                Padding = new Thickness(5),
+                Items =
+                {
+                    new MenuItem()
+                    {
+                        Header = "Remove",
+                        Command = ReactiveCommand.Create(() =>
+                        {
+                            this.Items.Remove(this.SelectedItem);
+                        }),
+                    }
+                }
+            };
+
+            return listItem;
         }
 
         protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
@@ -64,6 +91,9 @@ namespace Disableton.Views.Controls
             base.OnApplyTemplate(e);
 
             _dropControl = e.NameScope.Find<DropControl>("PART_Drop");
+
+            if (_dropControl != null)
+                _dropControl.FileDrop += FileDropCallback;
         }
     }
 }
