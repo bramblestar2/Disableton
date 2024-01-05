@@ -1,0 +1,55 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Disableton.Views.Controls">
+
+  <StyleInclude Source="/Views/Controls/AudioFilesListItem.axaml"/>
+  <StyleInclude Source="/Views/Controls/DropControl.axaml"/>
+  
+  <Design.PreviewWith>
+    <Border Padding="50">
+      <controls:AudioFilesList/>
+    </Border>
+  </Design.PreviewWith>
+
+  <Style Selector="controls|AudioFilesList">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border>
+          <ScrollViewer>
+            <Grid RowDefinitions="Auto,Auto,Auto"
+                  Margin="10">
+              
+              <TextBlock Text="No Audio"
+                         Grid.Row="0"
+                         HorizontalAlignment="Center"
+                         IsVisible="False"
+                         Foreground="White"/>
+              
+              <ItemsPresenter Grid.Row="0"
+                              Name="PART_ItemsPresenter"/>
+              
+              <Separator Grid.Row="1"
+                         Name="PART_Separator"/>
+              
+              <controls:DropControl Grid.Row="2"
+                                    HorizontalAlignment="Stretch"
+                                    Height="50"
+                                    x:Name="PART_Drop"/>
+            </Grid>
+          </ScrollViewer>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:empty">
+      <Style Selector="^ /template/ ItemsPresenter">
+        <Setter Property="IsVisible" Value="False"/>
+      </Style>
+      
+      <Style Selector="^ /template/ TextBlock">
+        <Setter Property="IsVisible" Value="True"/>
+      </Style>
+    </Style>
+  </Style>
+</Styles>

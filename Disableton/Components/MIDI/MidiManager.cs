@@ -4,34 +4,34 @@ using System.Collections.ObjectModel;
 
 namespace Disableton.Components.MIDI
 {
-    public class MidiManager
+    static public class MidiManager
     {
-        public ObservableCollection<IMidiInputDevice> InputDevices
+        static public ObservableCollection<IMidiInputDevice> InputDevices
         {
             get => _inputDevices;
             private set => _inputDevices = value;
         }
 
-        private ObservableCollection<IMidiInputDevice> _inputDevices = new ObservableCollection<IMidiInputDevice>();
+        static private ObservableCollection<IMidiInputDevice> _inputDevices = new ObservableCollection<IMidiInputDevice>();
 
-        public MidiManager()
+        static MidiManager()
         {
         }
 
-        public void AddMidiDevice(IMidiInputDeviceInfo device)
+        static public void AddMidiDevice(IMidiInputDeviceInfo device)
         {
             var inputDevice = device.CreateDevice();
             inputDevice.Open();
             InputDevices.Add(inputDevice);
         }
 
-        public void RemoveMidiDevice(int index)
+        static public void RemoveMidiDevice(int index)
         {
             if (InRange(index))
                 InputDevices.RemoveAt(index);
         }
 
-        public void ListenToAllMidis(NoteOnMessageHandler action)
+        static public void ListenToAllMidis(NoteOnMessageHandler action)
         {
             for (int i = 0; i < InputDevices.Count; i++)
             {
@@ -39,7 +39,7 @@ namespace Disableton.Components.MIDI
             }
         }
 
-        public void ListenToMidi(int index, NoteOnMessageHandler action)
+        static public void ListenToMidi(int index, NoteOnMessageHandler action)
         {
             if (InRange(index))
             {
@@ -47,7 +47,7 @@ namespace Disableton.Components.MIDI
             }    
         }
 
-        public void Clear()
+        static public void Clear()
         {
             foreach (IMidiInputDevice device in InputDevices)
             {
@@ -58,7 +58,7 @@ namespace Disableton.Components.MIDI
             InputDevices.Clear();
         }
 
-        private bool InRange(int index)
+        static private bool InRange(int index)
         {
             if (index >= 0 &&
                 index < InputDevices.Count)

@@ -37,7 +37,6 @@ public class MainViewModel : ViewModelBase
 
     #region Member Variables
 
-    private MidiManager _midiManager = new MidiManager();
     private ObservableCollection<string> _totalMidiDevices = new ObservableCollection<string>();
     private ObservableCollection<string> _connectedMidiDevices = new ObservableCollection<string>();
 
@@ -76,10 +75,10 @@ public class MainViewModel : ViewModelBase
         {
             if (SelectedMidiDevice != null)
             {
-                _midiManager.Clear();
-                _midiManager.AddMidiDevice(MidiConnections.MidiInputDevices[(int)SelectedMidiDevice]);
+                MidiManager.Clear();
+                MidiManager.AddMidiDevice(MidiConnections.MidiInputDevices[(int)SelectedMidiDevice]);
 
-                _midiManager.ListenToAllMidis((IMidiInputDevice s, in NoteOnMessage e) =>
+                MidiManager.ListenToAllMidis((IMidiInputDevice s, in NoteOnMessage e) =>
                 {
                     int note = (int)e.Key;
 
@@ -95,21 +94,21 @@ public class MainViewModel : ViewModelBase
 
         RemoveMidiCommand = ReactiveCommand.Create(() =>
         {
-            _midiManager.Clear();
+            MidiManager.Clear();
             RefreshConnectedDevicesList();
         });
     }
 
     public void Dispose()
     {
-        _midiManager.Clear();
+        MidiManager.Clear();
 
     }
 
     private void RefreshConnectedDevicesList()
     {
         ConnectedDevices.Clear();
-        foreach (var device in _midiManager.InputDevices)
+        foreach (var device in MidiManager.InputDevices)
         {
             ConnectedDevices.Add(device.Name);
         }

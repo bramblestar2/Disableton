@@ -35,7 +35,8 @@
       <ControlTemplate>
         <Border DragDrop.AllowDrop="True"
                 Background="{TemplateBinding Background}"
-                CornerRadius="{TemplateBinding CornerRadius}">
+                CornerRadius="{TemplateBinding CornerRadius}"
+                ClipToBounds="True">
           <Viewbox RenderTransform="scale(0.6)">
             <materialIcons:MaterialIcon Kind="Upload"
                                         Name="PART_Icon"

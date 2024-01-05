@@ -15,11 +15,16 @@ namespace Disableton.Views.Controls
     [PseudoClasses(pcDragEnter, pcDrop)]
     public class DropControl : TemplatedControl
     {
-        public static readonly RoutedEvent<DragEventArgs> FileDropEvent =
-            RoutedEvent.Register<DragEventArgs>(nameof(FileDrop), RoutingStrategies.Bubble, typeof(DropControl));
+        #region Pseudo Classes
 
         public const string pcDragEnter = ":drag-enter";
         public const string pcDrop      = ":drop";
+
+        #endregion
+
+        public static readonly RoutedEvent<DragEventArgs> FileDropEvent =
+            RoutedEvent.Register<DragEventArgs>(nameof(FileDrop), RoutingStrategies.Bubble, typeof(DropControl));
+
 
         public event EventHandler<DragEventArgs> FileDrop
         {
@@ -42,6 +47,7 @@ namespace Disableton.Views.Controls
             PseudoClasses.Set(pcDrop, true);
             PseudoClasses.Set(pcDragEnter, false);
 
+            
             Task.Delay(1000).ContinueWith(t =>
             {
                 Dispatcher.UIThread.Invoke(() =>
