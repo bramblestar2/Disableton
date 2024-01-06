@@ -1,0 +1,19 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Disableton.Views.Controls">
+  <Design.PreviewWith>
+    <Border Padding="50">
+      <controls:ButtonSampler />
+    </Border>
+  </Design.PreviewWith>
+
+  <Style Selector="controls|ButtonSampler">
+    
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <MaskedTextBox Mask="00:00:00"/>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

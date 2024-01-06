@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Disableton.ViewModels"
              xmlns:controls="clr-namespace:Disableton.Views.Controls"
+             xmlns:rs="using:RangeSlider.Avalonia.Controls"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Disableton.Views.MainView"
@@ -47,6 +48,22 @@
 
       <controls:AudioFilesList Grid.Column="2"
                                Grid.Row="1"/>
+      
+      <rs:RangeSlider Grid.Row="2"
+                      LowerSelectedValue="0"
+                      UpperSelectedValue="100"
+                      Grid.Column="2"
+                      Width="200"
+                      Minimum="0"
+                      Maximum="100"
+                      Name="range"/>
+
+      <StackPanel Grid.Row="2"
+                  Grid.Column="3">
+        <TextBlock Text="{Binding #range.UpperSelectedValue}"/>
+        <TextBlock Text="{Binding #range.LowerSelectedValue}"/>
+      </StackPanel>
+      
     </Grid>
   </Border>
 </UserControl>

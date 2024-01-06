@@ -26,6 +26,8 @@ namespace Disableton.Components.MIDI
         {
             if ((MidiInputDevices.Count == MidiDeviceManager.Default.InputDevices.Count()) || forceReload) return false;
 
+            MidiManager.Clear();
+
             MidiInputDevices.Clear();
             MidiInputDevices.AddRange(MidiDeviceManager.Default.InputDevices);
 
